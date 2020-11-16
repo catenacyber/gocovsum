@@ -18,7 +18,7 @@ import (
 type CoverageTotal struct {
 	Count     int     `json:"count"`
 	Covered   int     `json:"covered"`
-	Uncovered int     `json:"uncovered"`
+	Uncovered int     `json:"notcovered"`
 	Percent   float64 `json:"percent"`
 }
 
@@ -46,7 +46,9 @@ type CoverageSummary struct {
 func isFunctionCovered(s token.Position, e token.Position, blocks []cover.ProfileBlock) bool {
 	for _, b := range blocks {
 		if b.StartLine >= s.Line && b.StartLine <= e.Line && b.EndLine >= s.Line && b.EndLine <= e.Line {
-			return true
+			if b.Count > 0 {
+				return true
+			}
 		}
 	}
 	return false
